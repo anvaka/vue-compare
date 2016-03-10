@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Native SVG Rendering</title>
+  <style>
+html, body {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+svg {
+  width: 800px;
+  height: 600px;
+}
+  </style>
+</head>
+<body>
+  <svg id='scene'></svg>
+  <script type="text/javascript" charset="utf-8">
+var scene = document.getElementById('scene');
+var WIDTH = 800
+var HEIGHT = 600
+var ns = 'http://www.w3.org/2000/svg';
+
+var model = createModel(1000);
+model.points.forEach(addToScene);
+requestAnimationFrame(render);
+
+function render() {
+  requestAnimationFrame(render);
+  model.step();
+  model.points.forEach(update);
+}
+
+function addToScene(p) {
+  var element = document.createElementNS(ns, 'circle');
+  element.setAttributeNS(null, 'fill', '#FC309D');
+  element.setAttributeNS(null, 'r', '2px');
+  p.el = element;
+  update(p);
+
+  scene.appendChild(element);
+}
+
+function update(p) {
+  var element = p.el;
+  element.setAttributeNS(null, 'cx', p.x);
+  element.setAttributeNS(null, 'cy', p.y);
+}
+
+function createModel (count) {
+  var points = []
+  for (var i = 0; i < count; ++i) {
+    points.push({
+      x: Math.random() * WIDTH,
+      y: Math.random() * HEIGHT,
+      vx: Math.random() * 4 - 2,
+      vy: Math.random() * 4 - 2
+    })
+  }
+
+  return {
+    points,
+    step
+  }
+
+  function step () {
+    points.forEach(move)
+  }
+
+  function move (p) {
+    if (p.x > WIDTH || p.x < 0) p.vx *= -1
+    if (p.y > HEIGHT || p.y < 0) p.vy *= -1
+    p.y += p.vy
+    p.x += p.vx
+  }
+}
+  </script>
+</body>
+</html>

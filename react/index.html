@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>react version</title>
+    <script src="https://fb.me/react-0.14.7.min.js"></script>
+    <script src="https://fb.me/react-dom-0.14.7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <style type="text/css" media="screen">
+html, body {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+svg {
+  width: 800px;
+  height: 600px;
+}
+    </style>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/babel">
+var WIDTH = 800
+var HEIGHT = 600
+
+var model = createModel(1000);
+var App = React.createClass({
+  componentDidMount: function() {
+    var self = this;
+    requestAnimationFrame(render)
+
+    function render() {
+      requestAnimationFrame(render)
+      model.step();
+      self.forceUpdate();
+    }
+  },
+  render: function() {
+    var points = model.points.map(toCircle);
+    return <svg>{points}</svg>;
+
+    function toCircle(p) {
+      return <circle cx={p.x} cy={p.y} r='2px' fill='#FC309D'></circle>
+    }
+  }
+})
+
+ReactDOM.render(<App />, document.getElementById('example')
+);
+
+function createModel (count) {
+  var points = []
+  for (var i = 0; i < count; ++i) {
+    points.push({
+      x: Math.random() * WIDTH,
+      y: Math.random() * HEIGHT,
+      vx: Math.random() * 4 - 2,
+      vy: Math.random() * 4 - 2
+    })
+  }
+
+  return {
+    points,
+    step
+  }
+
+  function step () {
+    points.forEach(move)
+  }
+
+  function move (p) {
+    if (p.x > WIDTH || p.x < 0) p.vx *= -1
+    if (p.y > HEIGHT || p.y < 0) p.vy *= -1
+    p.y += p.vy
+    p.x += p.vx
+  }
+}
+    </script>
+  </body>
+</html>
