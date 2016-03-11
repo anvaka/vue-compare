@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Native SVG Rendering</title>
+  <title>1.0.17-dev vue.js version</title>
+  <script src="vue.min.js"></script>
   <style>
 html, body {
   height: 100%;
@@ -16,16 +17,16 @@ svg {
   </style>
 </head>
 <body>
-  <svg id='scene'></svg>
-  <script type="text/javascript" charset="utf-8">
-var scene = document.getElementById('scene');
+ <div id="app">
+ <svg>
+    <circle  v-for='point in points' :cx='point.x' :cy='point.y' r='2px' fill='#FC309D'></circle>
+ </svg>
+</div> 
+<script type="text/javascript" charset="utf-8">
+
 var WIDTH = 800
 var HEIGHT = 600
-var ns = 'http://www.w3.org/2000/svg';
-
 var model = createModel(1000);
-model.points.forEach(addToScene);
-
 var counter = 0;
 var startTime = new Date();
 setInterval(printStats, 10000);
@@ -39,30 +40,20 @@ function printStats() {
   startTime = new Date();
 }
 
-requestAnimationFrame(render);
+new Vue({
+  el: '#app',
+  data: model,
+  created: function () {
+    var self = this
+    self.raf = window.requestAnimationFrame(render)
 
-function render() {
-  requestAnimationFrame(render);
-  model.step();
-  model.points.forEach(update);
-  counter += 1;
-}
-
-function addToScene(p) {
-  var element = document.createElementNS(ns, 'circle');
-  element.setAttributeNS(null, 'fill', '#FC309D');
-  element.setAttributeNS(null, 'r', '2px');
-  p.el = element;
-  update(p);
-
-  scene.appendChild(element);
-}
-
-function update(p) {
-  var element = p.el;
-  element.setAttributeNS(null, 'cx', p.x);
-  element.setAttributeNS(null, 'cy', p.y);
-}
+    function render () {
+      self.raf = window.requestAnimationFrame(render)
+      self.step()
+      counter++;
+    }
+  }
+});
 
 function createModel (count) {
   var points = []
@@ -76,8 +67,8 @@ function createModel (count) {
   }
 
   return {
-    points,
-    step
+    points: points,
+    step: step
   }
 
   function step () {
@@ -91,6 +82,6 @@ function createModel (count) {
     p.x += p.vx
   }
 }
-  </script>
+</script>
 </body>
 </html>

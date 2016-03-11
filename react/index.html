@@ -26,6 +26,20 @@ var WIDTH = 800
 var HEIGHT = 600
 
 var model = createModel(1000);
+
+var counter = 0;
+var startTime = new Date();
+setInterval(printStats, 10000);
+
+function printStats() {
+  var currentTime = new Date();
+  var elapsed = (currentTime - startTime)/1000;
+  console.log(counter + ' calls in last ' + elapsed + 's');
+  console.log(counter/elapsed + ' fps per second over ' + elapsed + 's time period');
+  counter = 0;
+  startTime = new Date();
+}
+
 var App = React.createClass({
   componentDidMount: function() {
     var self = this;
@@ -35,6 +49,7 @@ var App = React.createClass({
       requestAnimationFrame(render)
       model.step();
       self.forceUpdate();
+      counter++;
     }
   },
   render: function() {
