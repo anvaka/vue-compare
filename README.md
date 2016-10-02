@@ -15,8 +15,8 @@ using plain DOM API. Then we compare it with vue.js and react.
 
 This is on my old MacBookPro (late 2011):
 
-* vue.js (v1.0.25): ~20 FPS
-* react: (v15.1.0) ~23 FPS
+* vue.js (v2.0.1): ~23-24 FPS
+* react: (v15.3.2) ~25-27 FPS
 * native DOM: ~31-32 FPS
 
 You can measure FPS yourself here: https://anvaka.github.io/vue-compare/index.html.
