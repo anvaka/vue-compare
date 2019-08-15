@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <title>react version</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.min.js"></script>
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
     <style type="text/css" media="screen">
 html, body {
@@ -40,8 +40,8 @@ function printStats() {
   startTime = new Date();
 }
 
-var App = React.createClass({
-  componentDidMount: function() {
+class App extends React.Component {
+  componentDidMount() {
     var self = this;
     requestAnimationFrame(render)
 
@@ -51,17 +51,16 @@ var App = React.createClass({
       self.forceUpdate();
       counter++;
     }
-  },
-  render: function() {
+  }
+  render() {
     var points = model.points.map(toCircle);
     return <svg>{points}</svg>;
-
-    function toCircle(p) {
-      return <circle cx={p.x} cy={p.y} r='2px' fill='#FC309D'></circle>
-    }
   }
-})
+}
 
+function toCircle(p) {
+  return <circle cx={p.x} cy={p.y} r='2px' fill='#FC309D'></circle>
+}
 ReactDOM.render(<App />, document.getElementById('example')
 );
 
