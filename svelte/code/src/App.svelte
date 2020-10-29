@@ -3,7 +3,7 @@ import { onMount } from 'svelte';
 
 var WIDTH = 800
 var HEIGHT = 600
-var model = createModel(1000);
+var model = createModel(3000);
 var points = model.points;
 var raf;
 

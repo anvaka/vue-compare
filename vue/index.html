@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <title>vue.js version</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+  <script src="https://unpkg.com/vue@3.0.2/dist/vue.global.js"></script>
   <style>
 html, body {
   height: 100%;
@@ -26,7 +26,7 @@ svg {
 
 var WIDTH = 800
 var HEIGHT = 600
-var model = createModel(1000);
+var pointsCount = 3000;
 
 var counter = 0;
 var startTime = new Date();
@@ -41,48 +41,47 @@ function printStats() {
   startTime = new Date();
 }
 
-new Vue({
-  el: '#app',
-  data: model,
-  created: function () {
-    var self = this
-    self.raf = window.requestAnimationFrame(render)
+const App = {
+  data() {
+    let points = [];
+    for (var i = 0; i < pointsCount; ++i) {
+      points.push({
+        x: Math.random() * WIDTH,
+        y: Math.random() * HEIGHT,
+        vx: Math.random() * 4 - 2,
+        vy: Math.random() * 4 - 2
+      })
+    };
 
-    function render () {
-      self.raf = window.requestAnimationFrame(render)
-      self.step()
+    return {
+      points
+    }
+  },
+  created: function () {
+    window.requestAnimationFrame(this.renderFrame)
+  },
+  methods: {
+    renderFrame() {
+      window.requestAnimationFrame(this.renderFrame)
+      this.step()
       counter++;
+    },
+
+    step () {
+      this.points.forEach(this.move)
+    },
+
+    move (p) {
+      if (p.x > WIDTH || p.x < 0) p.vx *= -1
+      if (p.y > HEIGHT || p.y < 0) p.vy *= -1
+      p.y += p.vy
+      p.x += p.vx
     }
   }
-});
-
-function createModel (count) {
-  var points = []
-  for (var i = 0; i < count; ++i) {
-    points.push({
-      x: Math.random() * WIDTH,
-      y: Math.random() * HEIGHT,
-      vx: Math.random() * 4 - 2,
-      vy: Math.random() * 4 - 2
-    })
-  }
-
-  return {
-    points: points,
-    step: step
-  }
-
-  function step () {
-    points.forEach(move)
-  }
-
-  function move (p) {
-    if (p.x > WIDTH || p.x < 0) p.vx *= -1
-    if (p.y > HEIGHT || p.y < 0) p.vy *= -1
-    p.y += p.vy
-    p.x += p.vx
-  }
 }
+
+Vue.createApp(App).mount('#app');
+
 </script>
 </body>
 </html>
