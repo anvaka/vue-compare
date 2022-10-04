@@ -60,6 +60,12 @@ function createModel (count) {
 }
 </script>
 
+ <svg>
+ {#each points as point}
+    <circle cx={point.x} cy={point.y} r='2px' fill='#FC309D'></circle>
+	{/each}
+ </svg>
+
 <style>
 html, body {
   height: 100%;
@@ -72,9 +78,3 @@ svg {
   height: 600px;
 }
 </style>
-
- <svg>
- {#each points as point}
-    <circle cx={point.x} cy={point.y} r='2px' fill='#FC309D'></circle>
-	{/each}
- </svg>
